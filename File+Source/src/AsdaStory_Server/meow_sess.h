@@ -56,7 +56,7 @@ class mw_session : public mw_Savable
    mw_gear gear;
    mw_skills skills;
    char login[53];
-   char password[85];
+   char password[114];
    int number_at_chr;
    int number_at_map;
    int sess_pseudo_id;
