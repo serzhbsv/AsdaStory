@@ -1,0 +1,1 @@
+.\meow_server5.exe >> log.txt

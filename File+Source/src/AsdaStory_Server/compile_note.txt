@@ -10,3 +10,5 @@ The project was once started on Pascal (nice tools to quickly build
 up from scratch). But then my friend Roan (the Rocket) told me to rewrite 
 all in C++ for serious programmers to work more easily with the sources.
 Thanks to my friend for this advice and for great help with C coding.
+
+Windows 10 22h2 Compile with Bloodshed Dev-C++ 4.9.8.0

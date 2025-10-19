@@ -1,29 +1,29 @@
 # Project: meow_server5
-# Makefile created by Dev-C++ 5.8.3
+# Makefile created by Dev-C++ 4.9.8.0
 
-CPP      = g++.exe
-CC       = gcc.exe
-WINDRES  = windres.exe
-RES      = meow_server5_private.res
-OBJ      = meow_main.o char_thread.o map_thread.o meow_char.o meow_inv.o meow_sess.o meow_nice_pkt.o meow_npc.o meow_mob.o meow_portal.o meow_drop.o $(RES)
+CPP  = g++.exe
+CC   = gcc.exe
+WINDRES = windres.exe
+RES  = meow_server5_private.res
+OBJ  = meow_main.o char_thread.o map_thread.o meow_char.o meow_inv.o meow_sess.o meow_nice_pkt.o meow_npc.o meow_mob.o meow_portal.o meow_drop.o $(RES)
 LINKOBJ  = meow_main.o char_thread.o map_thread.o meow_char.o meow_inv.o meow_sess.o meow_nice_pkt.o meow_npc.o meow_mob.o meow_portal.o meow_drop.o $(RES)
-LIBS     = -L"C:/MinGW/lib" -static-libgcc mp_sys/svm_sys.a
-INCS     = -I"C:/MinGW/include" -I"C:/MinGW/lib/gcc/mingw32/4.8.1/include"
-CXXINCS  = -I"C:/MinGW/include" -I"C:/MinGW/lib/gcc/mingw32/4.8.1/include/c++"
-BIN      = ../../bin/MEOW_Server/meow_server5.exe
+LIBS =  -L"E:/Install/Dev-Cpp/lib" mp_sys/svm_sys.a 
+INCS =  -I"E:/Install/Dev-Cpp/include" 
+CXXINCS =  -I"E:/Install/Dev-Cpp/include/c++"  -I"E:/Install/Dev-Cpp/include/c++/mingw32"  -I"E:/Install/Dev-Cpp/include/c++/backward"  -I"E:/Install/Dev-Cpp/include" 
+BIN  = ../../bin/AsdaStory_Server/meow_server5.exe
 CXXFLAGS = $(CXXINCS) 
-CFLAGS   = $(INCS) 
-RM       = rm.exe -f
+CFLAGS = $(INCS) 
 
 .PHONY: all all-before all-after clean clean-custom
 
-all: all-before $(BIN) all-after
+all: all-before ../../bin/AsdaStory_Server/meow_server5.exe all-after
+
 
 clean: clean-custom
-	${RM} $(OBJ) $(BIN)
+	rm -f $(OBJ) $(BIN)
 
-$(BIN): $(OBJ)
-	$(CPP) $(LINKOBJ) -o $(BIN) $(LIBS)
+$(BIN): $(LINKOBJ)
+	$(CPP) $(LINKOBJ) -o "..\..\bin\AsdaStory_Server\meow_server5.exe" $(LIBS)
 
 meow_main.o: meow_main.cpp
 	$(CPP) -c meow_main.cpp -o meow_main.o $(CXXFLAGS)
@@ -59,5 +59,4 @@ meow_drop.o: meow_drop.cpp
 	$(CPP) -c meow_drop.cpp -o meow_drop.o $(CXXFLAGS)
 
 meow_server5_private.res: meow_server5_private.rc 
-	$(WINDRES) -i meow_server5_private.rc --input-format=rc -o meow_server5_private.res -O coff 
-
+	$(WINDRES) -i meow_server5_private.rc -I rc -o meow_server5_private.res -O coff 

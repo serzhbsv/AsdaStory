@@ -92,7 +92,7 @@ static void do_parse_chat(int SessNumber, char *chat)
      out_buf[3]=0; out_buf[4]=0;
      out_buf[5]=mw_sessions[SessNumber]->chr.iid.byte0; out_buf[6]=mw_sessions[SessNumber]->chr.iid.byte1;
      out_buf[7]=0xBF; out_buf[8]=0x13; out_buf[9]=0x01;
-     char *ip=&(out_buf[10]); mpStrCopy(ip, my_ip); out_buf[30]=0xC8; out_buf[31]=0x0F; //port
+     char *ip=&(out_buf[10]); mpStrCopy(ip, my_ip); out_buf[30]=0x61; out_buf[31]=0x44; //port 17505
      out_buf[32]=mw_sessions[SessNumber]->chr.map_id.byte0; out_buf[33]=mw_sessions[SessNumber]->chr.map_id.byte1;
      out_buf[34]=(div(mw_sessions[SessNumber]->chr.my_X,256)).rem; out_buf[35]=(div(mw_sessions[SessNumber]->chr.my_X,256)).quot;
      out_buf[36]=(div(mw_sessions[SessNumber]->chr.my_Y,256)).rem; out_buf[37]=(div(mw_sessions[SessNumber]->chr.my_Y,256)).quot;
@@ -250,10 +250,10 @@ void mw_session::SaveToFile(char* dirname)
    mpText* sessfile=CreateEmptyText(); if (!sessfile) return;
    char str[255]; char str2[255];
    mpStrCopy(str, "login "); mpStrAddStr(str, login);
- //  printf("login %s",str);
+printf("login %s\n",str);
    mpAppendStrToText(sessfile, str);
    mpStrCopy(str, "password "); mpStrAddStr(str, password);
-  // printf("senha %s ",str);
+printf("parol' %s \n",str);
    mpAppendStrToText(sessfile, str);
    mpStrCopy(str, "end");
    mpAppendStrToText(sessfile, str);
@@ -284,7 +284,7 @@ int mw_session::getSessionNumber()
    return -1;
 }
 void mw_session::send_invalid_login()
-{//use this method if login failed
+{//ispol'zuyte etot metod, yesli vkhod ne udalsya
    char out_buf[2048]; int i; for (i=0; i<2048; i++) out_buf[i]=0;
    out_buf[7]=0xEC; out_buf[8]=0x03; out_buf[9]=0x02; out_buf[10]=0x00;
    out_buf[11]=0xFF; out_buf[12]=0xFF; out_buf[13]=0xFF; out_buf[14]=0xFF;   
@@ -292,7 +292,7 @@ void mw_session::send_invalid_login()
    out_buf[25]=0xFE; out_buf[0]=0xFB; out_buf[1]=0x1A; out_buf[2]=0x0;
    dll_write_n(number_at_chr, 0, 27, &(out_buf[0]));
 }
-void mw_session::enter_char_create() //*2 -- apenas enviando esses pacotes, ele recebe o incom_buf[7]= (int)246, responsável por criar o char
+void mw_session::enter_char_create() //*2 -- prosto otpravlyaya eti pakety, on poluchayet incom_buf[7]= (int)246, otvechayushchiy za sozdaniye simvola
 {
 	  char out_buf[2048]; int i; for (i=0; i<2048; i++) out_buf[i]=0;
    out_buf[7]=0xEC; out_buf[8]=0x03; out_buf[9]=0x01; out_buf[10]=0x00;
@@ -317,7 +317,8 @@ void mw_session::enter_map()
    out_buf[11]=div(sess_pseudo_id,256).rem; out_buf[12]=div(sess_pseudo_id,256).quot;
    out_buf[13]=0; out_buf[14]=0;   
    out_buf[15]=0x01; out_buf[16]=0x75; out_buf[17]=0x05; out_buf[18]=0x16;
-   out_buf[25]=0xFE; out_buf[0]=0xFB; out_buf[1]=0x1A; out_buf[2]=0x0; 
+   out_buf[25]=0xFE; out_buf[0]=0xFB; out_buf[1]=0x1A; out_buf[2]=0x0;
+   printf("Send pacode 1 %s\n",out_buf);   
    dll_write_n(number_at_chr, 0, 27, &(out_buf[0])); // pacote 1
    printf ("session %d assigned code %d\n", getSessionNumber(), sess_pseudo_id);
    for (i=0; i<2048; i++) out_buf[i]=0; for (i=0; i<=chr_info_pkt_sz; i++) out_buf[i]=chr_info_pkt[i];
@@ -335,10 +336,10 @@ void mw_session::enter_map()
    out_buf[84]=(div(chr.m_mp,256)).rem;    /*lower byte max mp*/  out_buf[85]=(div(chr.m_mp,256)).quot;//elder byte
    out_buf[86]=(div(chr.hp,256)).rem;      /*lower byte hp*/      out_buf[87]=(div(chr.hp,256)).quot;//elder byte
    out_buf[88]=(div(chr.mp,256)).rem;      /*lower byte mp*/      out_buf[89]=(div(chr.mp,256)).quot;//elder byte
-      //90-159 - char stats TODO :set them
+      //90-159 - kharakteristiki personazhey TODO :ustanovit' ikh
       
   
-
+ printf("Send pacode 1 %s\n",out_buf);
 	 
     dll_write_n(number_at_chr, 0, chr_info_pkt_sz+1, &(out_buf[0])); // pacote 2
       
@@ -357,11 +358,11 @@ void mw_session::enter_map()
    out_buf[37]=(div(chr.my_X,256)).rem; out_buf[38]=(div(chr.my_X,256)).quot;
    out_buf[39]=(div(chr.my_Y,256)).rem; out_buf[40]=(div(chr.my_Y,256)).quot;
 //   out_buf[45]=0xFE; sz=47;  out_buf[0]=0xFB; out_buf[1]=sz-1; out_buf[2]=0;
-   out_buf[44]=0xFE; sz=46;  out_buf[0]=0xFB; out_buf[1]=sz-1; out_buf[2]=0;	  printf ("pacote para entrar no mapa\n");
+   out_buf[44]=0xFE; sz=46;  out_buf[0]=0xFB; out_buf[1]=sz-1; out_buf[2]=0;	  printf ("paket dlya vkhoda na kartu\n");
    dll_write_n(number_at_chr, 0, sz, &(out_buf[0])); // pacote 3
    //number_at_chr=-1;//DONT DO IT HERE! (it must be done in map thread)
   
-   // *3 (recebe 21 pelo wpe) não está retornando o in>FB 3A 00 00 00 00 00 20 4E 0A 45 F5 C9 97 9B 00 00 9C 82 FF 98 88 98 E0 6A FC 03 5F 97 62 02 B8 42 03 00 00 00 FF FF FF FF FF FF FF FF FF FF FF FF 6E 00 00 00 FF FF FF
+   // *3 (poluchayet 21 ot wpe) ne vozvrashchayet vkhod>FB 3A 00 00 00 00 00 20 4E 0A 45 F5 C9 97 9B 00 00 9C 82 FF 98 88 98 E0 6A FC 03 5F 97 62 02 B8 42 03 00 00 00 FF FF FF FF FF FF FF FF FF FF FF FF 6E 00 00 00 FF FF FF
 
 }
 void mw_session::reply_id(bool do_double)

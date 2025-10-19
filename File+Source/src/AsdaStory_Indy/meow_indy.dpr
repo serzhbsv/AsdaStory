@@ -15,8 +15,7 @@ const max_connects=99;
       crypt_key : array[0..31] of byte =
       ($87,$96,$B4,$42,$71,$C5,$57,$35,$3D,$11,$8B,$69,$77,$94,$59,$55,
        $95,$69,$D5,$95,$3C,$9A,$AA,$20,$E1,$15,$CD,$50,$AA,$E8,$04,$40);
-                                      , IdBaseComponent, IdComponent,
-  IdTCPServer, IdStack
+
 type
   t_c_callback = function(
     n_connect: integer;
@@ -112,8 +111,8 @@ begin
   srvTimer:=TProgressThread.create(true);
   ChrServer:=TIdTCPServer.Create(nil);
   MapServer:=TIdTCPServer.Create(nil);
-  ChrServer.DefaultPort:=35061;
-  MapServer.DefaultPort:=35062;
+  ChrServer.DefaultPort:=4010;
+  MapServer.DefaultPort:=4040;
   ChrServer.OnConnect:=Chr_ServerConnect;
   ChrServer.OnExecute:=Chr_ServerExecute;
   ChrServer.OnDisconnect:=Chr_ServerDisconnect;

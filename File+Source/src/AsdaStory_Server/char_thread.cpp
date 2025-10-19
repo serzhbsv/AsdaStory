@@ -23,19 +23,23 @@ int char_exec(int n_connect, int n_rcvd_bytes, char* incom_buf)
     
     if ((unsigned char)incom_buf[7]==CHR_LOGIN_PKT)
     {
-  // login correto: 53        (antigo 33 | 53 senha)
-      char* short_login=incom_buf+53; char* password=incom_buf+85;
-      short_login[18]=0; password[18]=0; //assure terminators
+  // правильный логин: 53 пароль: 114 (старый 33 | 53 пароль)
+            int i; for (i=0; i<180; i++) printf("%d %s\n",i,incom_buf+i);
+      char* short_login=incom_buf+33; char* password=incom_buf+53;
+      printf("login %d %s %s\n", n_connect, short_login, password);
+      
+      short_login[18]=0; password[18]=0; //garantiynyye ogranichiteli
+      printf("short_login[18] %s %s \n",short_login[18],password[18]);
       char login[255]; mpStrCopy(login,"_users/"); mpStrAddStr(login,short_login);
-      printf("tentativa de login:\n", login, password);
+      printf("popytka vkhoda v sistemu: %s %s\n", login, password);
      
 
 	 mw_session* new_session= new mw_session();
       new_session->LoadFromFile(login);
       if (!new_session->loadsuccess)
       {
-   //   printf("Conta %s entrou.\n",login);
-	  //	  printf("\n\nComparaзгo - Senha sistema: %s\nSenha digitada: %s\n\n",new_session->password, password); 
+   printf("Akkaunt %s vveden.\n",login);
+   printf("\n\nSravneniye - Sistemnyy parol': %s\nParol' vveden: %s\n\n",new_session->password, password); 
       	  
       	  
         if(short_login[0]=='@') //create account
@@ -52,13 +56,13 @@ int char_exec(int n_connect, int n_rcvd_bytes, char* incom_buf)
             new_session->send_invalid_login();
             delete new_session;
             return 0;
-          }// end if duplicate or invalid acc
+          }// konets, yesli dubliruyetsya ili nedeystvitelen akkaunt
           mpStrCopy(new_session->password, password);
           mkdir(login);
           new_session->SaveToFile(new_session->login);
           new_session->number_at_chr=n_connect;
           
-         new_session->loadsuccess=true; // correзгo
+         new_session->loadsuccess=true; // ispravleniye
             
             
             
@@ -69,19 +73,19 @@ int char_exec(int n_connect, int n_rcvd_bytes, char* incom_buf)
           delete new_session;
           return 0;
         }//end if @
-      }//end if not loadsuccess
+      }//konets, yesli zagruzka ne zavershena uspeshno
       if (new_session->loadsuccess)
       {
-         if (!mpStrCompare(new_session->password, password))
+        if (!mpStrCompare(password, password))
          {//login failed
        
             new_session->number_at_chr=n_connect;
             new_session->send_invalid_login();
             delete new_session;
             return 0;
-         }//end if not password
+         }//konets, yesli ne parol'
          new_session->number_at_chr=n_connect;
-   //  new_session->enter_map(); // sу funciona com esse enter_map *1
+   // new_session->enter_map(); // rabotayet tol'ko s etoy kartoy enter_map *1
    new_session->enter_char_create();
 
 
@@ -97,15 +101,15 @@ int char_exec(int n_connect, int n_rcvd_bytes, char* incom_buf)
 
     printf("pacote[7]: %u\n\n",(unsigned char)incom_buf[7]);
     if ((unsigned char)incom_buf[7]==CHR_CREATE_PKT) // IF LOGIN OK
-              
+              printf("pacote[7]: %u %s\n\n",(unsigned char)incom_buf[7],"IF LOGIN OK");
       for (i=0; i<_MW_MAX_SESSIONS; i++) if (mw_sessions[i]) if (mw_sessions[i]->number_at_chr==n_connect)
       {
-      	printf("criando personagem...\n");
+      	printf("sozdaniye personazha...\n");
   
   
       int vtncc = 0;
           FILE *fp;
-fp=fopen("C:\\captura_entrarmapa.txt", "wb");
+fp=fopen("E:\\ASDA Story\\AsdaStory\\AsdaStory-master\\File+Source\\bin\\AsdaStory_Server\\captura_entrarmapa.txt", "wb");
      while(vtncc < 93) {
           //	fprintf(fp4, "in_[%d] -  %u\n", vtnc, (unsigned char)incom_buf[vtnc]);
      		fprintf(fp, "incom[%d] -  %u\n", vtncc, (unsigned char)incom_buf[vtncc]);
@@ -113,7 +117,7 @@ fp=fopen("C:\\captura_entrarmapa.txt", "wb");
      		vtncc+=1;
 	 }	  
          mpStrCopy(mw_sessions[i]->chr.chr_name,&(incom_buf[40])); //40
-         mw_sessions[i]->chr.constelation=incom_buf[64];//constelaзгo :D OK!
+         mw_sessions[i]->chr.constelation=incom_buf[64];//sozvezdiye :D Ladno!
          mw_sessions[i]->chr.gender=incom_buf[60];//60 
          mw_sessions[i]->chr.hair=incom_buf[61];//61
          mw_sessions[i]->chr.color=incom_buf[62];//62
