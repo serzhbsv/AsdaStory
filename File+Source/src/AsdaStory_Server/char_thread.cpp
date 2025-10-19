@@ -58,6 +58,7 @@ int char_exec(int n_connect, int n_rcvd_bytes, char* incom_buf)
             return 0;
           }// konets, yesli dubliruyetsya ili nedeystvitelen akkaunt
           mpStrCopy(new_session->password, password);
+		     printf("new_session->password: %s.\n",new_session->password);
           mkdir(login);
           new_session->SaveToFile(new_session->login);
           new_session->number_at_chr=n_connect;
@@ -76,7 +77,8 @@ int char_exec(int n_connect, int n_rcvd_bytes, char* incom_buf)
       }//konets, yesli zagruzka ne zavershena uspeshno
       if (new_session->loadsuccess)
       {
-        if (!mpStrCompare(password, password))
+
+        if (!mpStrCompare(new_session->password, password))
          {//login failed
        
             new_session->number_at_chr=n_connect;
