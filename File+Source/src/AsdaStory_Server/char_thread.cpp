@@ -25,7 +25,7 @@ int char_exec(int n_connect, int n_rcvd_bytes, char* incom_buf)
     {
   // правильный логин: 53 пароль: 114 (старый 33 | 53 пароль)
             int i; for (i=0; i<180; i++) printf("%d %s\n",i,incom_buf+i);
-      char* short_login=incom_buf+33; char* password=incom_buf+53;
+      char* short_login=incom_buf+53; char* password=incom_buf+114;
       printf("login %d %s %s\n", n_connect, short_login, password);
       
       short_login[18]=0; password[18]=0; //garantiynyye ogranichiteli
